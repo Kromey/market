@@ -26,7 +26,7 @@ fn main() {
             let qty = 20;
             let price = 35;
             println!("==> Player attempting to buy {qty} Food @ {price}/ea");
-            let volume = economy.bulk_buy(&Goods::Food, price, qty).unwrap();
+            let volume = economy.buy_good(&Goods::Food, price, qty).unwrap();
             println!(
                 "==> Player successfully bought {volume} units for {} total",
                 volume * price
@@ -35,7 +35,7 @@ fn main() {
             let qty = 20;
             let price = 25;
             println!("==> Player attempting to sell {qty} Food @ {price}/ea");
-            let volume = economy.bulk_sell(&Goods::Food, price, qty).unwrap();
+            let volume = economy.sell_good(&Goods::Food, price, qty).unwrap();
             println!(
                 "==> Player successfully sold {volume} units for {} total",
                 volume * price

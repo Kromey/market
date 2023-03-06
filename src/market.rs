@@ -12,6 +12,7 @@ pub struct Market {
     buyers: Vec<Buyer>,
     sellers: Vec<Seller>,
     history: History<25>,
+    rng: Xoshiro256StarStar,
 }
 
 impl Market {
@@ -29,6 +30,7 @@ impl Market {
                 .map(|_| Seller::new(rng.gen_range(seller_limit..=price)))
                 .collect(),
             history: History::new(),
+            rng: Xoshiro256StarStar::from_entropy(),
         }
     }
 
@@ -44,16 +46,14 @@ impl Market {
         let mut buyers: Vec<_> = self.buyers.iter_mut().collect();
         let mut sellers: Vec<_> = self.sellers.iter_mut().collect();
 
-        let mut rng = Xoshiro256StarStar::from_entropy();
-
         let mut volume = 0;
         let mut value = 0;
 
-        buyers.shuffle(&mut rng);
+        buyers.shuffle(&mut self.rng);
 
         for buyer in buyers {
             let mut bought = false;
-            sellers.shuffle(&mut rng);
+            sellers.shuffle(&mut self.rng);
             for i in 0..sellers.len() {
                 let ask = sellers[i].ask_price() as f32;
                 let bid = buyer.bid_price() as f32;
@@ -82,13 +82,12 @@ impl Market {
         self.history.insert(volume, value);
     }
 
-    pub fn bulk_buy(&mut self, price: u32, qty: u32) -> u32 {
+    pub fn buy(&mut self, price: u32, qty: u32) -> u32 {
         let mut sellers: Vec<_> = self.sellers.iter_mut().collect();
 
-        let mut rng = Xoshiro256StarStar::from_entropy();
         let mut volume = 0;
 
-        sellers.shuffle(&mut rng);
+        sellers.shuffle(&mut self.rng);
 
         for seller in sellers.iter_mut() {
             if price >= seller.ask_price() {
@@ -104,13 +103,12 @@ impl Market {
         volume
     }
 
-    pub fn bulk_sell(&mut self, price: u32, qty: u32) -> u32 {
+    pub fn sell(&mut self, price: u32, qty: u32) -> u32 {
         let mut buyers: Vec<_> = self.buyers.iter_mut().collect();
 
-        let mut rng = Xoshiro256StarStar::from_entropy();
         let mut volume = 0;
 
-        buyers.shuffle(&mut rng);
+        buyers.shuffle(&mut self.rng);
 
         for buyer in buyers.iter_mut() {
             if price <= buyer.bid_price() {

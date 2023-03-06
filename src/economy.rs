@@ -42,11 +42,11 @@ impl<G: Hash + Eq> Economy<G> {
         });
     }
 
-    pub fn bulk_buy(&mut self, good: &G, price: u32, qty: u32) -> Option<u32> {
-        Some(self.markets.get_mut(good)?.bulk_buy(price, qty))
+    pub fn buy_good(&mut self, good: &G, price: u32, qty: u32) -> Option<u32> {
+        Some(self.markets.get_mut(good)?.buy(price, qty))
     }
 
-    pub fn bulk_sell(&mut self, good: &G, price: u32, qty: u32) -> Option<u32> {
-        Some(self.markets.get_mut(good)?.bulk_sell(price, qty))
+    pub fn sell_good(&mut self, good: &G, price: u32, qty: u32) -> Option<u32> {
+        Some(self.markets.get_mut(good)?.sell(price, qty))
     }
 }
