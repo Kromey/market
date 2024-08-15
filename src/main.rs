@@ -3,13 +3,13 @@ use market::Economy;
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy)]
 enum Goods {
     Food,
-    Electronics,
+    // Electronics,
 }
 
 fn main() {
     let mut economy = Economy::new();
-    economy.add_good(Goods::Food, 20, 50);
-    economy.add_good(Goods::Electronics, 50, 40);
+    economy.add_good(Goods::Food, 20, 250);
+    // economy.add_good(Goods::Electronics, 50, 40);
 
     for day in 1..=75 {
         economy.do_trades();
@@ -23,7 +23,7 @@ fn main() {
         );
 
         if day % 15 == 0 {
-            let qty = 20;
+            let qty = 200;
             let price = 35;
             println!("==> Player attempting to buy {qty} Food @ {price}/ea");
             let volume = economy.buy_good(&Goods::Food, price, qty).unwrap();
@@ -32,7 +32,7 @@ fn main() {
                 volume * price
             );
         } else if day % 20 == 0 {
-            let qty = 20;
+            let qty = 200;
             let price = 25;
             println!("==> Player attempting to sell {qty} Food @ {price}/ea");
             let volume = economy.sell_good(&Goods::Food, price, qty).unwrap();
